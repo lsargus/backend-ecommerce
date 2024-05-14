@@ -3,11 +3,15 @@ package br.com.ecommerce.controllers;
 import br.com.ecommerce.models.Book;
 import br.com.ecommerce.models.Order;
 import br.com.ecommerce.services.OrderService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,17 +19,23 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-    @Autowired
-    private OrderService orderService;
 
-    @PostMapping
-    public ResponseEntity<Order> placeOrder(@RequestBody Order order) {
-        return new ResponseEntity<>(orderService.placeOrder(order), HttpStatus.CREATED);
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @PostMapping("/{cartId}")
+    public ResponseEntity<Order> placeOrder(@PathVariable Long cartId) {
+        Optional<Order> created = orderService.placeOrder(cartId);
+        return created.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order updatedOrder) {
-        Optional<Order> updated = orderService.updateOrder(id, updatedOrder);
+    public ResponseEntity<Order> updateOrder(@PathVariable Long id) {
+        Optional<Order> updated = orderService.updateOrder(id);
         return updated.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

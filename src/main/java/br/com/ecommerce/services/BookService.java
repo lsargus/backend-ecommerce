@@ -2,8 +2,6 @@ package br.com.ecommerce.services;
 
 import br.com.ecommerce.models.Book;
 import br.com.ecommerce.repositories.BookRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +9,12 @@ import java.util.Optional;
 
 @Service
 public class BookService {
-    @Autowired
-    private BookRepository bookRepository;
+
+    private final BookRepository bookRepository;
+
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     public Book addBook(Book book) {
         return bookRepository.save(book);
@@ -22,7 +24,7 @@ public class BookService {
         return bookRepository.findById(id).map(book -> {
             book.setTitle(updatedBook.getTitle());
             book.setAuthor(updatedBook.getAuthor());
-            book.setISBN(updatedBook.getISBN());
+            book.setIsbn(updatedBook.getIsbn());
             book.setPrice(updatedBook.getPrice());
             book.setStock(updatedBook.getStock());
             return bookRepository.save(book);

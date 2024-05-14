@@ -1,8 +1,14 @@
 package br.com.ecommerce.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
-import java.util.List;
 
 @Entity
 @Data
@@ -16,11 +22,11 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
-    private List<Book> books;
+    @OneToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
-    private Integer quantity;
+    private Long quantity;
     private Double totalPrice;
     private String status;
 
@@ -34,40 +40,6 @@ public class Order {
 
     public void cancelOrder() {
         this.status = "Cancelled";
-    }
-    
-    public List<Book> getBooks() {
-        return this.books;
-    }
-    
-    
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
-    public Integer getQuantity() {
-        return this.quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Double getTotalPrice() {
-        return this.totalPrice;
-    }
-
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public String getStatus() {
-        return this.status;
-    }
-    
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public void getOrderDetails() {

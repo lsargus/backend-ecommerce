@@ -2,16 +2,18 @@ package br.com.ecommerce.services;
 
 import br.com.ecommerce.models.User;
 import br.com.ecommerce.repositories.UserRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public Optional<User> updateProfile(Long id, User updatedUser) {
         return userRepository.findById(id).map(user -> {
@@ -30,6 +32,10 @@ public class UserService {
             userRepository.delete(user);
             return true;
         }).orElse(false);
+    }
+
+    public User registerUser(User user) {
+        return userRepository.save(user);
     }
 
 
