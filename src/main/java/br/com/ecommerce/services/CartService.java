@@ -99,7 +99,7 @@ public class CartService {
 
     public Optional<CartResponseDTO> getCartDTOById(Long id) {
 
-        var cart = getCartById(id).orElse(new Cart());
+        var cart = getCartById(id).orElse(new Cart(id));
         return Optional.of(new CartResponseDTO(cart, cartBookRepository.findByCart(cart)));
     }
 

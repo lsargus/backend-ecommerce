@@ -53,4 +53,8 @@ public class BookService {
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
+
+    public Integer checkStock(Long bookId) {
+         return bookRepository.findById(bookId).map(Book::getStock).orElse(0);
+    }
 }

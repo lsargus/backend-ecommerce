@@ -14,7 +14,7 @@ public class Payment {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private Double amount;
+    private Double amount; // valor
     private String paymentMethod;
     private String status;
 
